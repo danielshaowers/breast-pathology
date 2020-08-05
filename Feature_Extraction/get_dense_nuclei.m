@@ -78,6 +78,8 @@ disp(['OpenSlide version: ', openslide_get_version()])
 if nargin > 0
     start = 1;
     quarter = 0;
+    skipAmount = 0;
+    endIdx = 1;
 else
     if ~ispc
         xmlDir = dir('/mnt/rstor/CSE_BME_AXM788/data/tcga_brca_svs/aacruzr-tcga-bca-7effd4ea4c86/XML_TCGA_HG/**/*.xml');
@@ -97,10 +99,11 @@ else
     quarter = ceil((length(final_xml)-start)/4); %break loop down into four parts so we can run in parallel
     start = 0;
     quarter = ceil(length(final_xml) /4);
+    endIdx = length(final_xml);
 end
 mult = 1;
-skipAmount = 100;
-for y=1:length(final_xml)   %start+quarter(mult-1)+1:start + mult*quarter%quarter %length(final_xml)
+
+for y=1:endIdx   %start+quarter(mult-1)+1:start + mult*quarter%quarter %length(final_xml)
     if nargin == 0
         if ismember(lower(final_xml(y)), lower(foundList))
             continue
