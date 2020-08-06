@@ -1,5 +1,5 @@
 %42 images total.
-function extract_all_images_ignoreFeDeg(strSavePath, inputDir)
+function extract_all_images_ignoreFeDeg(strSavePath, strPathIM)
 %cd ..;
 %cd 'D:\AI_Lab\Relevant_Matlab'
 
@@ -24,6 +24,9 @@ flag_nuclei_cluster_finding = 0;
 para_nuclei_scale_low  = 8; %smallest pixels of a nucleus
 para_nuclei_scale_high = 18;
 flag_have_nuclei_mask = 0; %1 if true
+  nucleiPath='';
+    strEpiStrMaskPath=''; %currDir3(1).folder
+    wsi='';
 flag_epistroma = 0; %flags are either 0 or 1
 dbstop if error
 idxBegin = 1; %which image we want to start with
@@ -49,7 +52,9 @@ else
 end
 errorFile = fopen(errorFileName, 'w');
 else
-    fullDir = dir(inputDir);
+    idxEnd  =1;
+    Dextractfeature_ignoreFeDeg(idxBegin, idxEnd, wsi, flag_epistroma, strPathIM, strSavePath, strEpiStrMaskPath, nucleiPath, flag_have_nuclei_mask, flag_nuclei_cluster_finding,...
+    '.png', 0, 0, 0, 0, para_nuclei_scale_low, para_nuclei_scale_high);
 end
 
 % foundList={};
@@ -77,6 +82,7 @@ skipCount = 50;
 toSkip = skipCount * 1;
 for z=1:length(fullDir)
     try
+       
         %obtain the folders for each slide (should only be one)
         patientID = extractBetween(fullDir(z).name, 1, min(12, length(fullDir(z).name)));
         currDir = dir(sprintf('%s/%s', fullDir(z).folder, fullDir(z).name));
@@ -99,12 +105,12 @@ for z=1:length(fullDir)
                     idxEnd=idxBegin;
                     short_name = extractBetween(currDir3(a).name, length(currDir3(a).name)-9, length(currDir3(a).name) - 4);
                     strPathIM = sprintf('%s/', currDir3(1).folder); %this is the actual png
-                    if nargin == 0
+                    
                     strSavePath = sprintf('F:/Pathology/TCGA/features/%s', patientID{:});
                     if ~ispc
                         strSavePath = sprintf('/home/dxs765/TCGA/features/%s' , patientID{:});
                     end
-                    end
+                    
                     
                     
                     LcreateFolder(strSavePath);
